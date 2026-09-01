@@ -1,0 +1,7 @@
+.track-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.track-options:hover { border-color: rgba(106,75,184,.48); }
+.track-options .track-code { background:#e7def8; color:#6a4bb8; }
+.track-options .eyebrow { color:#6a4bb8; }
+:root[data-theme="dark"] .track-options .track-code { background:#2b223d; color:#b9a0ff; }
+:root[data-theme="dark"] .track-options .eyebrow { color:#b9a0ff; }
+@media (max-width: 1080px) { .track-grid { grid-template-columns: 1fr; } }

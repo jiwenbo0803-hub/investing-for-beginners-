@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f1e9" />
+  <meta name="description" content="个人美股学习导航站：从交易机制、财报、估值到宏观、SEC 文件与特殊事件。" />
+  <title>US Equity Learning Lab · 美股学习实验室</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="./index.html" aria-label="返回学习实验室首页">
+      <span class="brand-mark">UL</span>
+      <span><b>US Equity Learning Lab</b><small>美股学习实验室</small></span>
+    </a>
+    <nav class="nav-actions">
+      <a class="ghost-btn" href="./index.html">首页</a>
+      <a class="ghost-btn" href="./crypto.html">加密学习</a>
+      <a class="ghost-btn" data-hide-mobile="true" href="https://github.com/jiwenbo0803-hub/investing-for-beginners-/tree/main/content/stocks" target="_blank" rel="noreferrer">原仓库 ↗</a>
+      <button class="icon-btn" id="themeToggle" aria-label="切换主题">◐</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-copy">
+        <p class="eyebrow">PERSONAL LEARNING SYSTEM · US EQUITIES</p>
+        <h1>把零散知识，变成一套<br><span>能持续推进的美股学习系统。</span></h1>
+        <p class="hero-desc">按 13 个模块重新组织：交易机制 → 技术与盘面 → 财报 → 现金流与资本结构 → 宏观 → 估值 → SEC 与特殊事件。网站只做学习导航与进度管理，正文仍回到原 GitHub 仓库阅读。</p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="todayPick">今天学什么？</button>
+          <a class="secondary-btn" href="#roadmap">查看知识地图</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="panel-kicker">LEARNING OVERVIEW</div>
+        <div class="metric-row">
+          <div><strong>13</strong><span>学习模块</span></div>
+          <div><strong id="topicCount">0</strong><span>核心节点</span></div>
+          <div><strong>300+</strong><span>原仓库文章</span></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-meta"><span>核心学习进度</span><b id="progressText">0%</b></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </div>
+        <p class="panel-note">进度仅保存在当前浏览器，不上传任何数据。</p>
+      </div>
+    </section>
+
+    <section class="controls section-shell" id="roadmap">
+      <div>
+        <p class="eyebrow">KNOWLEDGE MAP</p>
+        <h2>13 模块知识地图</h2>
+      </div>
+      <div class="search-box">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索 PE、现金流、VIX、10-K…" autocomplete="off" />
+        <kbd>/</kbd>
+      </div>
+    </section>
+
+    <section class="modules section-shell" id="modules"></section>
+
+    <section class="note section-shell">
+      <div>
+        <p class="eyebrow">HOW TO USE</p>
+        <h2>建议按“先框架，后细节”学习</h2>
+      </div>
+      <div class="note-grid">
+        <article><b>01 · 打基础</b><p>先完成模块 1、3、5、6、7，建立交易规则、三张表、财报、宏观和估值框架。</p></article>
+        <article><b>02 · 做研究</b><p>再学模块 4、8、9，把现金流、资本回报、增长质量和股权稀释串起来。</p></article>
+        <article><b>03 · 补专业能力</b><p>最后进入模块 10–13：高级会计、财务取证、SEC 文件和特殊事件。</p></article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="pickDialog">
+    <button class="dialog-close" id="dialogClose" aria-label="关闭">×</button>
+    <p class="eyebrow">TODAY'S PICK</p>
+    <h3 id="pickTitle">今天的学习主题</h3>
+    <p id="pickModule"></p>
+    <a class="primary-btn" id="pickLink" target="_blank" rel="noreferrer">阅读原文 ↗</a>
+  </dialog>
+
+  <footer class="footer section-shell">
+    <span>US Equity Learning Lab</span>
+    <a href="./index.html">返回学习实验室首页</a>
+    <span>仅用于个人学习与研究 · 不构成投资建议</span>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>

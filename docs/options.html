@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f1e9" />
+  <meta name="description" content="个人期权学习导航站：从 Call/Put、Greeks、隐含波动率到价差、事件策略、对冲与定价模型。" />
+  <title>Options Learning Lab · 期权学习实验室</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    :root { --accent:#6a4bb8; --accent-soft:#e7def8; }
+    :root[data-theme="dark"] { --accent:#b9a0ff; --accent-soft:#2b223d; }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="./index.html" aria-label="返回学习实验室首页">
+      <span class="brand-mark">OL</span>
+      <span><b>Options Learning Lab</b><small>期权学习实验室</small></span>
+    </a>
+    <nav class="nav-actions">
+      <a class="ghost-btn" href="./index.html">首页</a>
+      <a class="ghost-btn" data-hide-mobile="true" href="./stocks.html">美股学习</a>
+      <a class="ghost-btn" data-hide-mobile="true" href="./crypto.html">加密学习</a>
+      <a class="ghost-btn" data-hide-mobile="true" href="https://github.com/jiwenbo0803-hub/investing-for-beginners-/tree/main/content/options" target="_blank" rel="noreferrer">原仓库 ↗</a>
+      <button class="icon-btn" id="themeToggle" aria-label="切换主题">◐</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-copy">
+        <p class="eyebrow">PERSONAL LEARNING SYSTEM · OPTIONS</p>
+        <h1>先理解风险暴露，<br><span>再学习如何组合收益结构。</span></h1>
+        <p class="hero-desc">按 13 个模块重新组织：合约基础 → 期权链 → Greeks → 隐含波动率 → 单腿策略 → 价差 → 中性策略 → 行权与指派 → 滚仓管理 → 事件波动 → 组合对冲 → 定价模型 → 0DTE / LEAPS / Dealer Gamma。网站只做学习导航与进度管理，正文仍回到原 GitHub 仓库阅读。</p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="todayPick">今天学什么？</button>
+          <a class="secondary-btn" href="#roadmap">查看知识地图</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="panel-kicker">LEARNING OVERVIEW</div>
+        <div class="metric-row">
+          <div><strong>13</strong><span>学习模块</span></div>
+          <div><strong id="topicCount">0</strong><span>核心节点</span></div>
+          <div><strong>Greeks</strong><span>核心风险语言</span></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-meta"><span>核心学习进度</span><b id="progressText">0%</b></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </div>
+        <p class="panel-note">进度仅保存在当前浏览器，不上传任何数据。</p>
+      </div>
+    </section>
+
+    <section class="controls section-shell" id="roadmap">
+      <div>
+        <p class="eyebrow">KNOWLEDGE MAP</p>
+        <h2>13 模块知识地图</h2>
+      </div>
+      <div class="search-box">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索 Delta、IV、铁鹰、财报、0DTE…" autocomplete="off" />
+        <kbd>/</kbd>
+      </div>
+    </section>
+
+    <section class="modules section-shell" id="modules"></section>
+
+    <section class="note section-shell">
+      <div>
+        <p class="eyebrow">HOW TO USE</p>
+        <h2>先学风险语言，再学策略名称</h2>
+      </div>
+      <div class="note-grid">
+        <article><b>01 · 先学合约与 Greeks</b><p>先完成模块 1–4，理解权利金、到期、Delta、Gamma、Theta、Vega 和 IV。否则后面的策略只是死记名字。</p></article>
+        <article><b>02 · 再学收益结构</b><p>模块 5–7 才进入 Call/Put、Covered Call、价差、铁鹰、跨式等策略，重点看最大盈利、最大亏损和盈亏平衡点。</p></article>
+        <article><b>03 · 最后学管理与模型</b><p>模块 8–13 处理指派、滚仓、财报/FOMC、组合对冲、定价模型和 0DTE 等更复杂风险。</p></article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="pickDialog">
+    <button class="dialog-close" id="dialogClose" aria-label="关闭">×</button>
+    <p class="eyebrow">TODAY'S PICK</p>
+    <h3 id="pickTitle">今天的学习主题</h3>
+    <p id="pickModule"></p>
+    <a class="primary-btn" id="pickLink" target="_blank" rel="noreferrer">阅读原文 ↗</a>
+  </dialog>
+
+  <footer class="footer section-shell">
+    <span>Options Learning Lab</span>
+    <a href="./index.html">返回学习实验室首页</a>
+    <span>仅用于个人学习与研究 · 不构成投资建议</span>
+  </footer>
+
+  <script src="./options.js"></script>
+</body>
+</html>

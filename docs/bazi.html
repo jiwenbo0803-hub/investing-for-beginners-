@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f1e9" />
+  <meta name="description" content="轻量人生排盘：输入公历或农历出生信息与出生地，在浏览器本地生成四柱八字、大运与流年。" />
+  <title>人生排盘 · Investment Learning Lab</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./bazi.css" />
+</head>
+<body class="bazi-page">
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="./index.html" aria-label="返回投资学习实验室首页">
+      <span class="brand-mark">IL</span>
+      <span><b>Investment Learning Lab</b><small>个人投资学习实验室</small></span>
+    </a>
+    <nav class="nav-actions">
+      <a class="ghost-btn" href="./index.html">← 返回首页</a>
+      <button class="icon-btn" id="themeToggle" aria-label="切换主题">◐</button>
+    </nav>
+  </header>
+
+  <main class="bazi-main section-shell">
+    <section class="bazi-hero">
+      <p class="eyebrow">LIFE CHART · 人生工具</p>
+      <h1>人生排盘</h1>
+      <p>输入出生日期、时间与出生地，自动换算公历 / 农历、四柱八字、起运信息与大运。第一版只做排盘，不做 AI 断语。</p>
+      <div class="privacy-note">出生信息默认只在当前浏览器中计算，不上传到本站服务器。</div>
+    </section>
+
+    <section class="bazi-layout">
+      <form class="bazi-card bazi-form" id="baziForm" novalidate>
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">INPUT</p>
+            <h2>出生信息</h2>
+          </div>
+          <span class="local-chip">LOCAL · 本地计算</span>
+        </div>
+
+        <div class="field-group">
+          <label>性别</label>
+          <div class="segmented" role="group" aria-label="性别">
+            <button type="button" class="seg-btn active" data-gender="male">乾造 · 男</button>
+            <button type="button" class="seg-btn" data-gender="female">坤造 · 女</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>历法</label>
+          <div class="segmented" role="group" aria-label="历法">
+            <button type="button" class="seg-btn active" data-calendar="solar">公历</button>
+            <button type="button" class="seg-btn" data-calendar="lunar">农历</button>
+          </div>
+        </div>
+
+        <div id="solarFields" class="field-group">
+          <label for="solarDate">出生日期</label>
+          <input id="solarDate" type="date" min="1900-01-01" max="2100-12-31" required />
+        </div>
+
+        <div id="lunarFields" class="field-group lunar-fields" hidden>
+          <label>农历日期</label>
+          <div class="lunar-grid">
+            <input id="lunarYear" type="number" min="1900" max="2100" inputmode="numeric" placeholder="年份" />
+            <select id="lunarMonth" aria-label="农历月份"></select>
+            <select id="lunarDay" aria-label="农历日期"></select>
+          </div>
+          <label class="check-row"><input id="lunarLeap" type="checkbox" /> <span>闰月</span><small id="leapHint">填写年份后自动提示该年闰月</small></label>
+        </div>
+
+        <div class="field-group">
+          <label for="birthTime">出生时间 <span class="muted">（当地钟表时间）</span></label>
+          <input id="birthTime" type="time" value="12:00" required />
+        </div>
+
+        <div class="field-group location-group">
+          <label for="birthPlace">出生地 <span class="muted">（中国大陆城市 / 区县）</span></label>
+          <div class="location-input-wrap">
+            <input id="birthPlace" type="search" autocomplete="off" placeholder="例如：武汉 / 杭州 / 朝阳区" required />
+            <span class="location-dot" aria-hidden="true">◎</span>
+          </div>
+          <div class="location-results" id="locationResults" hidden></div>
+          <p class="field-help" id="locationStatus">正在加载城市坐标库…</p>
+        </div>
+
+        <details class="advanced-box">
+          <summary>时间校正设置</summary>
+          <label class="check-row"><input id="trueSolarToggle" type="checkbox" checked /> <span>使用真太阳时校正</span></label>
+          <label class="check-row"><input id="dstToggle" type="checkbox" checked /> <span>自动修正中国大陆 1986–1991 夏令时</span></label>
+          <p>真太阳时采用“经度修正 + 均时差”近似计算。若出生时间正好处于时辰交界附近，建议同时核对专业排盘工具。</p>
+        </details>
+
+        <div class="form-error" id="formError" hidden></div>
+        <button class="primary-btn" id="calculateBtn" type="submit">开始排盘</button>
+        <p class="engine-note">排盘核心使用 lunar-javascript 1.7.7；地点坐标读取公开城市经纬度表。</p>
+      </form>
+
+      <section class="bazi-card result-shell" id="resultShell" aria-live="polite">
+        <div class="result-empty" id="resultEmpty">
+          <span class="empty-mark">命</span>
+          <h2>等待排盘</h2>
+          <p>填写左侧出生信息后，这里会生成四柱、大运与时间校正结果。</p>
+        </div>
+
+        <div id="resultContent" hidden>
+          <div class="card-head result-head">
+            <div>
+              <p class="eyebrow">BAZI CHART</p>
+              <h2>八字命盘</h2>
+            </div>
+            <button class="text-btn" id="resetBtn" type="button">重新排盘</button>
+          </div>
+
+          <div class="birth-summary" id="birthSummary"></div>
+          <div class="pillars" id="pillars"></div>
+          <div class="result-meta" id="resultMeta"></div>
+
+          <section class="yun-section">
+            <div class="section-title-row">
+              <div><p class="eyebrow">DA YUN</p><h3>大运</h3></div>
+              <span id="yunDirection"></span>
+            </div>
+            <div class="yun-grid" id="yunGrid"></div>
+          </section>
+
+          <details class="liunian-box" id="liunianBox">
+            <summary>展开流年</summary>
+            <div id="liunianContent"></div>
+          </details>
+
+          <div class="disclaimer">传统命理属于文化与民俗体系，本工具提供排盘与可视化，不构成对人生、健康、财富或其他现实结果的事实预测。</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer section-shell">
+    <span>Investment Learning Lab · 人生排盘</span>
+    <span>排盘工具 · 仅供文化学习与研究</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.js" defer></script>
+  <script src="./bazi.js" defer></script>
+</body>
+</html>

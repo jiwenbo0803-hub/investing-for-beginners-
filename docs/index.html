@@ -8,9 +8,19 @@
   <title>Investment Learning Lab · 投资学习实验室</title>
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./portal-v3.css" />
+  <script type="module" src="https://www.tradingview-widget.com/w/en/tv-ticker-tape.js"></script>
 </head>
 <body class="portal-page">
   <div class="noise"></div>
+
+  <section class="market-ticker" aria-label="全球市场实时行情">
+    <tv-ticker-tape
+      theme="dark"
+      item-size="compact"
+      symbols="SSE:000001,SZSE:399001,SP:SPX,NASDAQ:IXIC,DJ:DJI,BINANCE:BTCUSDT,TVC:GOLD"
+    ></tv-ticker-tape>
+  </section>
+
   <header class="topbar portal-topbar">
     <a class="brand" href="./index.html" aria-label="投资学习实验室首页">
       <span class="brand-mark">IL</span>

@@ -77,39 +77,143 @@
   }
 
   async function loadLocations() {
-    const url = 'https://raw.githubusercontent.com/jiwenbo0803-hub/life-kline/main/data/chinaCities.ts';
-    try {
-      const res = await fetch(url, {cache:'force-cache'});
-      if (!res.ok) throw new Error(String(res.status));
-      const text = await res.text();
-      const literal = extractArrayLiteral(text);
-      const regions = Function(`"use strict";return (${literal});`)();
-      state.locations = flattenRegions(regions);
-      $('locationStatus').textContent = `城市坐标库已加载 · ${state.locations.length} 个地点可搜索`;
-    } catch (err) {
-      state.locations = FALLBACK_LOCATIONS;
-      $('locationStatus').textContent = '完整城市库加载失败，已切换到常用城市列表';
+    const urls = [
+      'https://cdn.jsdelivr.net/gh/jiwenbo0803-hub/life-kline@main/data/chinaCities.ts',
+      'https://raw.githubusercontent.com/jiwenbo0803-hub/life-kline/main/data/chinaCities.ts'
+    ];
+    let lastError = null;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, {cache:'force-cache'});
+        if (!res.ok) throw new Error(String(res.status));
+        const text = await res.text();
+        const literal = extractArrayLiteral(text);
+        const regions = Function(`"use strict";return (${literal});`)();
+        const locations = flattenRegions(regions);
+        if (locations.length < 50) throw new Error('城市数据数量异常');
+        state.locations = locations;
+        $('locationStatus').textContent = `城市坐标库已加载 · ${state.locations.length} 个地点 · 可输入城市、区县或详细地址`;
+        return;
+      } catch (err) {
+        lastError = err;
+      }
     }
+    console.warn('完整城市库加载失败，使用常用城市列表', lastError);
+    state.locations = FALLBACK_LOCATIONS;
+    $('locationStatus').textContent = '完整城市库加载失败 · 当前支持常用城市；直接输入城市名即可';
+  }
+
+  function normalizeLocationText(text='') {
+    return String(text)
+      .toLowerCase()
+      .replace(/[\s,，。.;；、·•()（）\-_/\\]+/g, '');
+  }
+
+  function shortAdminName(name='') {
+    return normalizeLocationText(name)
+      .replace(/特别行政区$/, '')
+      .replace(/维吾尔自治区$/, '')
+      .replace(/壮族自治区$/, '')
+      .replace(/回族自治区$/, '')
+      .replace(/自治区$/, '')
+      .replace(/自治州$/, '')
+      .replace(/地区$/, '')
+      .replace(/省$/, '')
+      .replace(/市$/, '')
+      .replace(/区$/, '')
+      .replace(/县$/, '')
+      .replace(/旗$/, '')
+      .replace(/盟$/, '');
+  }
+
+  function rankLocationMatches(query) {
+    const q = normalizeLocationText(query);
+    if (!q) return [];
+
+    return state.locations.map(item => {
+      const parts = item.fullName.split(/\s+/).filter(Boolean);
+      const compact = normalizeLocationText(item.fullName);
+      const shortParts = parts.map(shortAdminName).filter(Boolean);
+      const shortCompact = shortParts.join('');
+      let score = -1;
+
+      if (q === compact || (shortCompact && q === shortCompact)) score = Math.max(score, 1200);
+      if (q.includes(compact) && compact.length >= 2) score = Math.max(score, 1000 + compact.length);
+      if (shortCompact && q.includes(shortCompact) && shortCompact.length >= 2) score = Math.max(score, 960 + shortCompact.length);
+      if (compact.includes(q) && q.length >= 2) score = Math.max(score, 760 - Math.max(0, compact.length - q.length));
+
+      let matchedParts = 0;
+      let matchedLast = false;
+      parts.forEach((part, index) => {
+        const full = normalizeLocationText(part);
+        const short = shortAdminName(part);
+        const aliases = [...new Set([full, short].filter(x => x && x.length >= 2))];
+        const isLast = index === parts.length - 1;
+
+        for (const alias of aliases) {
+          if (q === alias) {
+            score = Math.max(score, isLast ? 920 : 780);
+            matchedParts++;
+            if (isLast) matchedLast = true;
+            break;
+          }
+          if (q.includes(alias)) {
+            matchedParts++;
+            if (isLast) matchedLast = true;
+            break;
+          }
+        }
+      });
+
+      if (matchedParts) {
+        score = Math.max(score, 420 + matchedParts * 150 + (matchedLast ? 90 : 0));
+      }
+
+      return {item, score, depth: parts.length};
+    })
+      .filter(x => x.score >= 0)
+      .sort((a,b) => b.score - a.score || b.depth - a.depth || a.item.fullName.localeCompare(b.item.fullName, 'zh-CN'));
+  }
+
+  function selectLocation(item) {
+    if (!item) return;
+    state.location = item;
+    $('birthPlace').value = item.fullName;
+    $('locationStatus').textContent = `已选择：${item.fullName} · 东经 ${item.longitude.toFixed(4)}°`;
+    $('locationResults').hidden = true;
+  }
+
+  function tryResolveLocationInput() {
+    const query = $('birthPlace').value.trim();
+    if (!query) return {status:'empty'};
+    const ranked = rankLocationMatches(query);
+    if (!ranked.length) return {status:'none'};
+
+    const top = ranked[0];
+    const second = ranked[1];
+    const topLeaf = shortAdminName(top.item.fullName.split(/\s+/).filter(Boolean).at(-1));
+    const secondLeaf = second ? shortAdminName(second.item.fullName.split(/\s+/).filter(Boolean).at(-1)) : '';
+    if (second && second.score === top.score && topLeaf && topLeaf === secondLeaf && top.item.fullName !== second.item.fullName) {
+      return {status:'ambiguous'};
+    }
+
+    selectLocation(top.item);
+    return {status:'selected', item:top.item};
   }
 
   function renderLocationResults(query) {
     const box = $('locationResults');
-    const q = query.trim().replace(/\s+/g, '');
-    if (!q) { box.hidden = true; return; }
-    const matches = state.locations.filter(x => x.fullName.replace(/\s+/g,'').includes(q)).slice(0,8);
+    if (!query.trim()) { box.hidden = true; return; }
+    const matches = rankLocationMatches(query).slice(0,8);
     if (!matches.length) {
-      box.innerHTML = `<div class="location-option"><b>未找到地点</b><span>可尝试输入城市名或区县名</span></div>`;
+      box.innerHTML = `<div class="location-option"><b>未找到地点</b><span>可输入城市名，例如“武汉”；也可输入省市区或详细地址</span></div>`;
       box.hidden = false;
       return;
     }
-    box.innerHTML = matches.map((x,i) => `<button type="button" class="location-option" data-location-index="${i}"><b>${x.fullName}</b><span>东经 ${x.longitude.toFixed(4)}° · 北纬 ${x.latitude.toFixed(4)}°</span></button>`).join('');
+    box.innerHTML = matches.map((x,i) => `<button type="button" class="location-option" data-location-index="${i}"><b>${x.item.fullName}</b><span>东经 ${x.item.longitude.toFixed(4)}° · 北纬 ${x.item.latitude.toFixed(4)}°</span></button>`).join('');
     box.hidden = false;
     box.querySelectorAll('[data-location-index]').forEach(btn => btn.addEventListener('click', () => {
-      const item = matches[Number(btn.dataset.locationIndex)];
-      state.location = item;
-      $('birthPlace').value = item.fullName;
-      $('locationStatus').textContent = `已选择：${item.fullName} · 东经 ${item.longitude.toFixed(4)}°`;
-      box.hidden = true;
+      selectLocation(matches[Number(btn.dataset.locationIndex)]?.item);
     }));
   }
 
@@ -176,7 +280,7 @@
   }
 
   function calculateTrueSolar(base) {
-    if (!state.location) throw new Error('请从搜索结果中选择出生地');
+    if (!state.location) throw new Error('请先填写出生地');
     const useTrue = $('trueSolarToggle').checked;
     const useDST = $('dstToggle').checked;
     const dst = useDST && isChinaDST(base.y,base.m,base.d,base.h,base.min,state.location.fullName) ? 60 : 0;
@@ -228,7 +332,12 @@
     try {
       if (typeof Solar === 'undefined' || typeof Lunar === 'undefined') throw new Error('排盘引擎尚未加载，请检查网络后重试');
       if (!$('birthTime').value) throw new Error('请选择出生时间');
-      if (!state.location) throw new Error('请从地点搜索结果中选择出生地');
+      if (!state.location) {
+        const resolved = tryResolveLocationInput();
+        if (resolved.status === 'empty') throw new Error('请输入出生地；只输入城市名即可，例如“武汉”');
+        if (resolved.status === 'ambiguous') throw new Error('存在多个同名地点，请从下拉搜索结果中选择具体城市或区县');
+        if (resolved.status === 'none') throw new Error('没有识别到该地点，请尝试只输入城市名，或补充省 / 市 / 区县信息');
+      }
       const btn = $('calculateBtn'); btn.disabled = true; btn.textContent = '正在排盘…';
       const base = getInputSolarDate();
       const adjusted = calculateTrueSolar(base);

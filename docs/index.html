@@ -8,7 +8,38 @@
   <title>Investment Learning Lab · 投资学习实验室</title>
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./portal-v3.css" />
-  <script type="module" src="https://www.tradingview-widget.com/w/en/tv-ticker-tape.js"></script>
+  <script type="module">
+    (() => {
+      const sources = [
+        'https://widgets.tradingview-widget.com/w/en/tv-ticker-tape.js',
+        'https://www.tradingview-widget.com/w/en/tv-ticker-tape.js'
+      ];
+
+      const showTickerError = () => {
+        const render = () => {
+          const placeholder = document.querySelector('.ticker-placeholder');
+          if (placeholder) placeholder.textContent = '实时行情暂时无法加载 · 请刷新页面或检查网络';
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', render, { once: true });
+        } else {
+          render();
+        }
+      };
+
+      (async () => {
+        for (const src of sources) {
+          try {
+            await import(src);
+            if (customElements.get('tv-ticker-tape')) return;
+          } catch (_) {
+            // Try the alternate TradingView widget host below.
+          }
+        }
+        showTickerError();
+      })();
+    })();
+  </script>
 </head>
 <body class="portal-page">
   <div class="noise"></div>
@@ -16,9 +47,12 @@
   <section class="market-ticker" aria-label="全球市场实时行情">
     <tv-ticker-tape
       theme="dark"
+      direction="horizontal"
       item-size="compact"
-      symbols="SSE:000001,SZSE:399001,SP:SPX,NASDAQ:IXIC,DJ:DJI,BINANCE:BTCUSDT,TVC:GOLD"
-    ></tv-ticker-tape>
+      symbols="SSE:000001,SZSE:399001,FOREXCOM:SPXUSD,FOREXCOM:NSXUSD,FOREXCOM:DJI,BINANCE:BTCUSDT,BINANCE:ETHUSDT,TVC:GOLD"
+    >
+      <span class="ticker-placeholder" style="display:flex;min-height:42px;align-items:center;justify-content:center;padding:0 16px;color:#d8d8d8;font-size:12px;letter-spacing:.04em;">全球行情加载中…</span>
+    </tv-ticker-tape>
   </section>
 
   <header class="topbar portal-topbar">

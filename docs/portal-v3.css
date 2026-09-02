@@ -36,7 +36,13 @@
   align-items:start;
 }
 .portal-hero-copy { min-width:0; }
-.portal-hero h1 { max-width:760px; }
+.portal-hero h1 {
+  max-width:760px;
+  font-family:"Ma Shan Zheng","STKaiti","KaiTi","Kaiti SC",cursive;
+  font-weight:400;
+  letter-spacing:.015em;
+  line-height:1.12;
+}
 
 .daily-almanac {
   position:relative;

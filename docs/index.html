@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f4f1e9" />
-  <meta name="description" content="个人投资学习实验室：美股、加密货币与期权三套学习系统，一个入口统一管理。" />
+  <meta name="description" content="个人投资学习实验室：美股、加密货币与期权三套学习系统，以及人生排盘工具。" />
   <title>Investment Learning Lab · 投资学习实验室</title>
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./portal-v3.css" />
@@ -31,54 +31,38 @@
 
     <section class="track-grid section-shell" aria-label="选择学习板块">
       <a class="track-card track-stock" href="./stocks.html">
-        <div class="track-top">
-          <span class="track-code">US</span>
-          <span class="track-arrow">↗</span>
-        </div>
-        <div class="track-copy">
-          <p class="eyebrow">US EQUITIES</p>
-          <h2>美股</h2>
-          <p>交易机制、技术与盘面、三张表、财报、宏观、估值、SEC 文件与特殊事件。</p>
-        </div>
-        <div class="track-meta">
-          <span><b>13</b> 模块</span>
-          <span><b>78</b> 核心节点</span>
-          <span id="stockPortalProgress">未开始</span>
-        </div>
+        <div class="track-top"><span class="track-code">US</span><span class="track-arrow">↗</span></div>
+        <div class="track-copy"><p class="eyebrow">US EQUITIES</p><h2>美股</h2><p>交易机制、技术与盘面、三张表、财报、宏观、估值、SEC 文件与特殊事件。</p></div>
+        <div class="track-meta"><span><b>13</b> 模块</span><span><b>78</b> 核心节点</span><span id="stockPortalProgress">未开始</span></div>
       </a>
 
       <a class="track-card track-crypto" href="./crypto.html">
-        <div class="track-top">
-          <span class="track-code">CR</span>
-          <span class="track-arrow">↗</span>
-        </div>
-        <div class="track-copy">
-          <p class="eyebrow">CRYPTO</p>
-          <h2>加密货币</h2>
-          <p>BTC / ETH、钱包安全、交易所、永续合约、稳定币、DeFi、Tokenomics、链上安全与市场周期。</p>
-        </div>
-        <div class="track-meta">
-          <span><b>13</b> 模块</span>
-          <span><b>78</b> 核心节点</span>
-          <span id="cryptoPortalProgress">未开始</span>
-        </div>
+        <div class="track-top"><span class="track-code">CR</span><span class="track-arrow">↗</span></div>
+        <div class="track-copy"><p class="eyebrow">CRYPTO</p><h2>加密货币</h2><p>BTC / ETH、钱包安全、交易所、永续合约、稳定币、DeFi、Tokenomics、链上安全与市场周期。</p></div>
+        <div class="track-meta"><span><b>13</b> 模块</span><span><b>78</b> 核心节点</span><span id="cryptoPortalProgress">未开始</span></div>
       </a>
 
       <a class="track-card track-options" href="./options.html">
-        <div class="track-top">
-          <span class="track-code">OP</span>
-          <span class="track-arrow">↗</span>
+        <div class="track-top"><span class="track-code">OP</span><span class="track-arrow">↗</span></div>
+        <div class="track-copy"><p class="eyebrow">OPTIONS</p><h2>期权</h2><p>Call / Put、期权链、Greeks、隐含波动率、价差、中性策略、事件波动、对冲、定价模型与 0DTE。</p></div>
+        <div class="track-meta"><span><b>13</b> 模块</span><span><b>78</b> 核心节点</span><span id="optionsPortalProgress">未开始</span></div>
+      </a>
+    </section>
+
+    <section class="tool-section section-shell" aria-label="工具与实验">
+      <div class="tool-head">
+        <div><p class="eyebrow">TOOLS · 工具与实验</p><h2>不参与修炼等级的独立工具</h2></div>
+        <p>这里放实用的小工具，不和美股、加密、期权三条学习进度混在一起。</p>
+      </div>
+      <a class="tool-card" href="./bazi.html">
+        <div class="tool-icon">命</div>
+        <div class="tool-copy">
+          <p class="eyebrow">LIFE CHART</p>
+          <h3>人生排盘</h3>
+          <p>输入公历或农历出生日期、出生时间与出生地，自动生成四柱八字、起运、大运与流年。</p>
+          <div class="tool-tags"><span>公历 / 农历</span><span>真太阳时</span><span>本地计算</span></div>
         </div>
-        <div class="track-copy">
-          <p class="eyebrow">OPTIONS</p>
-          <h2>期权</h2>
-          <p>Call / Put、期权链、Greeks、隐含波动率、价差、中性策略、事件波动、对冲、定价模型与 0DTE。</p>
-        </div>
-        <div class="track-meta">
-          <span><b>13</b> 模块</span>
-          <span><b>78</b> 核心节点</span>
-          <span id="optionsPortalProgress">未开始</span>
-        </div>
+        <span class="tool-arrow">↗</span>
       </a>
     </section>
 
@@ -88,7 +72,7 @@
         <h2>元婴以下，皆是蝼蚁，唯有修炼，方可成道。</h2>
         <p style="margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.6;">Below the Nascent Soul realm, all are but ants; only through cultivation can one attain the Dao.</p>
       </div>
-      <p>学习记录仍只保存在访问者自己的浏览器中，美股、加密和期权三套进度互不覆盖。你之前分享出去的美股和加密页面链接继续有效。</p>
+      <p>学习记录仍只保存在访问者自己的浏览器中，美股、加密和期权三套进度互不覆盖。人生排盘属于独立工具，不计入修炼进度。</p>
     </section>
   </main>
 

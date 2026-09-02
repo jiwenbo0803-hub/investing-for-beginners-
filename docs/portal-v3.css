@@ -24,6 +24,11 @@
   min-height: 42px;
 }
 
+.portal-hero .hero-desc,
+.cultivation-head > p {
+  display: none;
+}
+
 .track-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .track-options:hover { border-color: rgba(106,75,184,.48); }
 .track-options .track-code { background:#e7def8; color:#6a4bb8; }

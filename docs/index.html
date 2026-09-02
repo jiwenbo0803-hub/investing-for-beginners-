@@ -68,9 +68,19 @@
 
   <main class="portal-main">
     <section class="portal-hero section-shell">
-      <p class="eyebrow">PERSONAL INVESTMENT KNOWLEDGE SYSTEM</p>
-      <h1>一个入口，选择你今天<br><span>想修炼的方向。</span></h1>
-      <p class="hero-desc">美股、加密货币与期权共用一个学习入口，但各自保留独立的知识地图、搜索、学习进度和“今天学什么”。电脑端强调信息密度，手机端优先保证触控与阅读体验。</p>
+      <div class="portal-hero-copy">
+        <p class="eyebrow">PERSONAL INVESTMENT KNOWLEDGE SYSTEM</p>
+        <h1>一个入口，选择你今天<br><span>想修炼的方向。</span></h1>
+        <p class="hero-desc">美股、加密货币与期权共用一个学习入口，但各自保留独立的知识地图、搜索、学习进度和“今天学什么”。电脑端强调信息密度，手机端优先保证触控与阅读体验。</p>
+      </div>
+
+      <aside class="daily-almanac" id="dailyAlmanac" aria-label="今日黄历与五行娱乐暗示" aria-live="polite">
+        <div class="almanac-loading">
+          <p class="eyebrow">DAILY ALMANAC · 今日黄历</p>
+          <b>正在读取今日黄历…</b>
+          <span>公历、农历、宜忌与五行娱乐信号</span>
+        </div>
+      </aside>
     </section>
 
     <section class="track-grid section-shell" aria-label="选择学习板块">
@@ -153,6 +163,7 @@
       });
     })();
   </script>
+  <script src="./almanac.js" defer></script>
   <script src="./realms.js"></script>
 </body>
 </html>

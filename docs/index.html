@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f4f1e9" />
-  <meta name="description" content="个人投资学习实验室：美股、加密货币、期权与投资阅读四套学习系统，一个入口统一管理。" />
+  <meta name="description" content="个人投资学习实验室：美股、加密货币与期权三套学习系统，一个入口统一管理。" />
   <title>Investment Learning Lab · 投资学习实验室</title>
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./portal-v3.css" />
@@ -26,7 +26,7 @@
     <section class="portal-hero section-shell">
       <p class="eyebrow">PERSONAL INVESTMENT KNOWLEDGE SYSTEM</p>
       <h1>一个入口，选择你今天<br><span>想修炼的方向。</span></h1>
-      <p class="hero-desc">美股、加密货币、期权与投资阅读共用一个学习入口，但各自保留独立的知识地图、搜索、学习进度和“今天学什么”。电脑端强调信息密度，手机端优先保证触控与阅读体验。</p>
+      <p class="hero-desc">美股、加密货币与期权共用一个学习入口，但各自保留独立的知识地图、搜索、学习进度和“今天学什么”。电脑端强调信息密度，手机端优先保证触控与阅读体验。</p>
     </section>
 
     <section class="track-grid section-shell" aria-label="选择学习板块">
@@ -80,32 +80,15 @@
           <span id="optionsPortalProgress">未开始</span>
         </div>
       </a>
-
-      <a class="track-card track-reading" href="./reading.html">
-        <div class="track-top">
-          <span class="track-code">IR</span>
-          <span class="track-arrow">↗</span>
-        </div>
-        <div class="track-copy">
-          <p class="eyebrow">INVESTING READING</p>
-          <h2>投资阅读库</h2>
-          <p>直接读取你 fork 的 awesome-investing：经典书籍、网站/博客、课程、Reddit、播客与研究工具。</p>
-        </div>
-        <div class="track-meta">
-          <span><b>6</b> 分类</span>
-          <span><b>150+</b> 资源</span>
-          <span id="readingPortalProgress">未开始</span>
-        </div>
-      </a>
     </section>
 
     <section class="portal-note section-shell">
       <div>
-        <p class="eyebrow">ONE LINK · FOUR TRACKS</p>
+        <p class="eyebrow">ONE LINK · THREE TRACKS</p>
         <h2>元婴以下，皆是蝼蚁，唯有修炼，方可成道。</h2>
         <p style="margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.6;">Below the Nascent Soul realm, all are but ants; only through cultivation can one attain the Dao.</p>
       </div>
-      <p>学习记录仍只保存在访问者自己的浏览器中，四套进度互不覆盖。投资阅读库会直接读取你 fork 的 awesome-investing README，源仓库更新后网页刷新即可同步。</p>
+      <p>学习记录仍只保存在访问者自己的浏览器中，美股、加密和期权三套进度互不覆盖。你之前分享出去的美股和加密页面链接继续有效。</p>
     </section>
   </main>
 
@@ -134,12 +117,6 @@
       writeProgress('stockPortalProgress', 'us-equity-learning-progress-v1');
       writeProgress('cryptoPortalProgress', 'crypto-learning-progress-v1');
       writeProgress('optionsPortalProgress', 'options-learning-progress-v1');
-
-      try {
-        const readingDone = JSON.parse(localStorage.getItem('awesome-investing-reading-progress-v1') || '[]').length;
-        const el = document.getElementById('readingPortalProgress');
-        el.textContent = readingDone ? `已读 ${readingDone}` : '未开始';
-      } catch {}
 
       document.getElementById('portalThemeToggle').addEventListener('click', () => {
         const next = root.dataset.theme === 'dark' ? 'light' : 'dark';

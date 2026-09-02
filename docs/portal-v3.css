@@ -1,3 +1,6 @@
+.cultivation-banner { margin-top: clamp(28px, 5vw, 54px); }
+.cultivation-banner img { display:block; width:100%; height:auto; aspect-ratio:3/1; object-fit:cover; object-position:center; border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow); }
+.cultivation-banner + .portal-hero { padding-top: clamp(44px, 6vw, 72px); }
 .track-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .track-options:hover { border-color: rgba(106,75,184,.48); }
 .track-options .track-code { background:#e7def8; color:#6a4bb8; }
@@ -5,3 +8,8 @@
 :root[data-theme="dark"] .track-options .track-code { background:#2b223d; color:#b9a0ff; }
 :root[data-theme="dark"] .track-options .eyebrow { color:#b9a0ff; }
 @media (max-width: 1080px) { .track-grid { grid-template-columns: 1fr; } }
+@media (max-width: 820px) {
+  .cultivation-banner { margin-top: 24px; }
+  .cultivation-banner img { border-radius:18px; }
+  .cultivation-banner + .portal-hero { padding-top: 40px; }
+}
